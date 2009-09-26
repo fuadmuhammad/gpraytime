@@ -8,6 +8,7 @@ import gobject
 import praytime
 import datetime
 import sys
+import os.path as path
 
 class PraytimeApplet:
   applet=None
@@ -23,16 +24,31 @@ class PraytimeApplet:
   longitude = 7
   latitude = 106.650002
   dialog=None
+  conf_file = None
+
 
   def __init__(self,applet,iid):
     self.applet=applet
     self.iid=iid
+    self.conf_file=path.expanduser("~/.gpraytime")
+    self.read_conf()
     self.delta=self.getNextDeltaPrayTime()
     self.label = gtk.Label(self.parseDeltaPrayTime())
     applet.add(self.label)
     self.create_menu()
     applet.show_all()
     gobject.timeout_add(self.timeout_interval, self.timeout_callback, self)
+
+  def read_conf(self):
+    if path.exists(self.conf_file) and path.isfile(self.conf_file):
+      try:
+        f = open(self.conf_file,"r") 
+        self.timezone=int(f.readline())
+        self.latitude=float(f.readline())
+        self.longitude=float(f.readline())  
+      except ValueError:
+        pass
+
 
   def create_menu(self):
     xml="""
@@ -84,8 +100,7 @@ class PraytimeApplet:
     table.attach(longitude_label,0,1,2,3)
     self.longitude_entry.show()
     table.attach(self.longitude_entry,1,2,2,3)
-    table.show() 
-        
+    table.show()  
 
     self.dialog.vbox.pack_start(table,True,True,0)
     self.dialog.show()
@@ -93,12 +108,20 @@ class PraytimeApplet:
   def ok_callback(self,widget,event):
     self.timezone=int(self.timezone_entry.get_text())
     self.latitude=float(self.latitude_entry.get_text())
-    self.longitude=int(self.longitude_entry.get_text()) 
+    self.longitude=float(self.longitude_entry.get_text()) 
     self.delta=self.getNextDeltaPrayTime()
     text_delta=self.parseDeltaPrayTime()
     if self.label.get_label!=text_delta:
       self.label.set_label(text_delta)
     self.update_time()
+    self.save_to_file()
+
+  def save_to_file(self):
+    f = open(self.conf_file,"w")
+    f.write(str(self.timezone)+"\n")
+    f.write(str(self.latitude)+"\n")
+    f.write(str(self.longitude)+"\n")
+      
  
   def cancel_callback(self,widget,event):
     self.dialog.destroy()
