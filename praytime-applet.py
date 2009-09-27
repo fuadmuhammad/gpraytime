@@ -109,11 +109,9 @@ class PraytimeApplet:
     self.timezone=int(self.timezone_entry.get_text())
     self.latitude=float(self.latitude_entry.get_text())
     self.longitude=float(self.longitude_entry.get_text()) 
+    self.next_pray_name=None
     self.delta=self.getNextDeltaPrayTime()
-    text_delta=self.parseDeltaPrayTime()
-    if self.label.get_label!=text_delta:
-      self.label.set_label(text_delta)
-    self.update_time()
+    self.label.set_label(self.parseDeltaPrayTime())
     self.save_to_file()
 
   def save_to_file(self):
@@ -150,7 +148,6 @@ class PraytimeApplet:
     return 1
   
   def getNextDeltaPrayTime(self):
-    #praytimes = praytime.PrayTime(datetime.date.today(),-6 , 106.650002, 7)
     praytimes = praytime.PrayTime(datetime.date.today(),self.timezone,self.latitude,self.longitude)
     current_time = datetime.datetime.today() 
     current_hour = current_time.hour
