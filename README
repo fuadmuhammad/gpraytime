@@ -1,2 +1,7 @@
 Gnome Praytime Applet
+Install:
+copy bonobo/GNOME_PraytimeApplet_Factory.server to /usr/lib/bonobo/servers/
+make /usr/lib/praytime-applet/ directory
+copy praytime.py and praytime-applet.py to /usr/lib/praytime-applet/ 
+
 
