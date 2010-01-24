@@ -10,6 +10,8 @@ import datetime
 import sys
 import os.path as path
 
+from time import time
+
 class PraytimeApplet:
   applet=None
   timeout_interval=1000
@@ -25,7 +27,8 @@ class PraytimeApplet:
   latitude = 106.650002
   dialog=None
   conf_file = None
-
+  
+  prev_unixtime = time()
 
   def __init__(self,applet,iid):
     self.applet=applet
@@ -134,14 +137,24 @@ class PraytimeApplet:
       return str(hours)+":"+str(minutes)+" to "+self.next_pray_name
 
   def update_time(self):
+   curr_unixtime = time()
+   
    if self.delta.seconds == 0:
       self.label.set_label("Now "+self.next_pray_name)
       self.delta=self.getNextDeltaPrayTime()
    else:
-      text_delta=self.parseDeltaPrayTime()
-      if self.label.get_label!=text_delta:
+     #anticipate if computer suspend so always check unixtime range
+     time_delta = curr_unixtime-self.prev_unixtime
+     print time_delta
+     if time_delta > 0.999 and time_delta < 1.02:
+       self.delta-=datetime.timedelta(0,1)
+     else:
+       self.delta=self.getNextDeltaPrayTime()
+     text_delta=self.parseDeltaPrayTime()
+     if self.label.get_label!=text_delta:
         self.label.set_label(text_delta)
-      self.delta-=datetime.timedelta(0,1)
+        
+   self.prev_unixtime=curr_unixtime
  
   def timeout_callback(self,event):
     self.update_time()
