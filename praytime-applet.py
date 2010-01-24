@@ -175,7 +175,7 @@ class PraytimeApplet:
     #praytime for fajr next day
     if not self.next_pray_name:
       tomorrow = datetime.date.today()+datetime.timedelta(1)
-      praytimes = praytime.PrayTime(tomorrow,self.timezone,self.latitude,self.longitude);
+      praytimes = praytime.PrayTime(tomorrow,self.latitude,self.longitude,self.timezone);
       praytimes = praytimes.getPrayTimes()
       next_praytime = datetime.datetime(tomorrow.year,tomorrow.month,tomorrow.day,praytimes[0]['hour'],praytimes[0]['minute'])
       self.next_pray_name=praytimes[0]['name']
