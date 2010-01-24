@@ -130,11 +130,13 @@ class PraytimeApplet:
 
   def parseDeltaPrayTime(self):
     hours = self.delta.seconds/3600
-    minutes = int(math.ceil((float)(self.delta.seconds-(hours)*3600)/60))
+    minutes = (float)(self.delta.seconds-(hours)*3600)/60
     if hours == 0:
-      seconds = self.delta.seconds-(minutes)*60
+      minutes = (int(math.floor(minutes)))
+      seconds = self.delta.seconds-minutes*60
       return str(minutes)+":"+str(seconds)+" to "+self.next_pray_name
     else:
+      minutes = (int(math.ceil(minutes)))
       return str(hours)+":"+str(minutes)+" to "+self.next_pray_name
 
   def update_time(self):
