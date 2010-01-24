@@ -124,5 +124,5 @@ class PrayTime:
     return self.__normalizeTime([fajr,sunrise,dhuhr,ashr,sunset,maghrib,isha])
 
 if __name__ == '__main__':
-  p = PrayTime(datetime.date.today(),-6 , 106.650002, 7)
+  p = PrayTime(datetime.date.today(),-6.2115440,106.8451720, 7)
   print p.getPrayTimes()

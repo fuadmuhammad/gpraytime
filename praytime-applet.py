@@ -9,6 +9,7 @@ import praytime
 import datetime
 import sys
 import os.path as path
+import math
 
 from time import time
 
@@ -129,7 +130,7 @@ class PraytimeApplet:
 
   def parseDeltaPrayTime(self):
     hours = self.delta.seconds/3600
-    minutes = (self.delta.seconds-(hours)*3600)/60
+    minutes = int(math.ceil((float)(self.delta.seconds-(hours)*3600)/60))
     if hours == 0:
       seconds = self.delta.seconds-(minutes)*60
       return str(minutes)+":"+str(seconds)+" to "+self.next_pray_name
@@ -145,7 +146,6 @@ class PraytimeApplet:
    else:
      #anticipate if computer suspend so always check unixtime range
      time_delta = curr_unixtime-self.prev_unixtime
-     print time_delta
      if time_delta > 0.999 and time_delta < 1.02:
        self.delta-=datetime.timedelta(0,1)
      else:
@@ -161,7 +161,7 @@ class PraytimeApplet:
     return 1
   
   def getNextDeltaPrayTime(self):
-    praytimes = praytime.PrayTime(datetime.date.today(),self.timezone,self.latitude,self.longitude)
+    praytimes = praytime.PrayTime(datetime.date.today(),self.latitude,self.longitude,self.timezone)
     current_time = datetime.datetime.today() 
     current_hour = current_time.hour
     current_minute = current_time.minute
@@ -178,6 +178,7 @@ class PraytimeApplet:
       next_praytime = datetime.datetime(tomorrow.year,tomorrow.month,tomorrow.day,praytimes[0]['hour'],praytimes[0]['minute'])
       self.next_pray_name=praytimes[0]['name']
     
+    current_time = datetime.datetime.today()
     delta =  next_praytime-current_time
     return delta
 
