@@ -29,9 +29,10 @@ class PraytimeApplet:
   dialog=None
   conf_file = None
   
-  prev_unixtime = time()
+  prev_unixtime = None
 
   def __init__(self,applet,iid):
+    self.prev_unixtime = time()
     self.applet=applet
     self.iid=iid
     self.conf_file=path.expanduser("~/.gpraytime")
