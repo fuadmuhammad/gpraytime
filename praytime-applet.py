@@ -23,9 +23,9 @@ class PraytimeApplet:
   timezone_entry=None
   longitude_entry=None
   latitude_entry=None
-  timezone = -6
-  longitude = 7
-  latitude = 106.650002
+  timezone = 7
+  longitude = 106.845172
+  latitude = -6.211544
   dialog=None
   conf_file = None
   
@@ -164,6 +164,7 @@ class PraytimeApplet:
     return 1
   
   def getNextDeltaPrayTime(self):
+    self.next_pray_name = None
     praytimes = praytime.PrayTime(datetime.date.today(),self.latitude,self.longitude,self.timezone)
     current_time = datetime.datetime.today() 
     current_hour = current_time.hour
@@ -180,7 +181,7 @@ class PraytimeApplet:
       praytimes = praytimes.getPrayTimes()
       next_praytime = datetime.datetime(tomorrow.year,tomorrow.month,tomorrow.day,praytimes[0]['hour'],praytimes[0]['minute'])
       self.next_pray_name=praytimes[0]['name']
-    
+      
     current_time = datetime.datetime.today()
     delta =  next_praytime-current_time
     return delta
