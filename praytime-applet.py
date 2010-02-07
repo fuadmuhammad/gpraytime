@@ -137,7 +137,7 @@ class PraytimeApplet:
       seconds = self.delta.seconds-minutes*60
       return str(minutes)+":"+str(seconds)+" to "+self.next_pray_name
     else:
-      minutes = (int(math.ceil(minutes)))
+      minutes = (int(math.floor(minutes)))
       return str(hours)+":"+str(minutes)+" to "+self.next_pray_name
 
   def update_time(self):
